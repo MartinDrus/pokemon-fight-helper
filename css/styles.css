@@ -1,0 +1,100 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    height: 100vh;
+    background-color: bisque;
+}
+
+div#autocomplete-container, input#main-input {
+    font: 20px Tahoma, Verdana, Arial, sans-serif;
+    /* font-weight: 600; */
+  }
+  
+  #autocomplete-container {
+    position: relative;
+    box-sizing: border-box;
+    width: 50vw;
+    height: 50px;
+
+    margin-top: 5em ;
+
+    background-color: rgb(255, 255, 255);
+
+  }
+  
+  #autocomplete {
+    width: 50vw;
+    height: 50px;
+
+    color: silver;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    outline: none;
+
+    box-sizing: border-box;
+    padding: 13px;
+    /* background-color: rgb(27, 66, 66); */
+    /* line-height: 1.5em; */
+
+
+    cursor: text;
+  }
+  
+  #autocomplete-container input[type=text] {
+    width: 50vw;
+    height: 50px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+
+
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    outline: none;
+    padding: 13px;
+
+    /* line-height: 1.5em; */
+
+    box-sizing: border-box;
+
+    transition: 0.2s;
+    background-color: transparent;
+
+
+    cursor: text;
+
+
+  }
+  
+  #autocomplete-container input[type=text]:focus {
+    border-color: dodgerBlue;
+    box-shadow: 0 0 8px 0 dodgerBlue;
+  }
+
+  #found-pokemon-container {
+    width: 50vw;
+    height: 10vh;
+
+    margin: 2em;
+
+    border-radius: 4px;
+
+    background-color: rgb(130, 167, 167);
+  }
