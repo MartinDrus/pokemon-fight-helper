@@ -142,24 +142,28 @@ async function getDamageRelations(pokemonData) {
 
     }
 
-    let types = {
-        double: 0
-    };
-    pokemonData.types.forEach(async entry => {
+    let typeArray = await pokemonData.types
+
+    let damageObj = {}
+
+
+    typeArray.forEach(async entry => {
         let pokemonType = `type/${entry.type.name}`;
-        let temp = await fetchData(pokemonType);
+        let damageStats = await fetchData(pokemonType);
 
-        let test = temp.damage_relations;
+        console.log(damageStats.damage_relations.double_damage_from);
+
+        damageObj.doubleDamage = damageStats.damage_relations.double_damage_from;
+        damageObj.halfDamage = damageStats.damage_relations.half_damage_from;
+        damageObj.noDamage = damageStats.damage_relations.no_damage_from;
 
 
-        console.log(test);
-
-        // types.push(test)
     });
 
-    console.log(types);
+    console.log(damageObj);
 
-    // calculateDamage(types);
+
+    //calculateDamage(types);
 
     
 }
@@ -167,14 +171,18 @@ async function getDamageRelations(pokemonData) {
 
 async function calculateDamage(types) {
 
-    let test = await types;
-    console.log(test.length);
 
-    (async () => {
-        for await (const num of types) {
-          console.log(num);
-        }
-    })();
+
+    let test = await types;
+
+
+    console.log(test);
+
+    // (async () => {
+    //     for await (const num of types) {
+    //       console.log(num);
+    //     }
+    // })();
     // for (let i = 0; i < array.length; i++) {
     //     const element = array[i];
         
