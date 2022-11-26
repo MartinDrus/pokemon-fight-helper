@@ -12,7 +12,7 @@ main {
     align-items: center;
 
     height: 100vh;
-    background-color: bisque;
+    background-color: rgb(78, 69, 57);
 }
 
 div#autocomplete-container, input#main-input {
@@ -27,6 +27,9 @@ div#autocomplete-container, input#main-input {
     height: 50px;
 
     margin-top: 5em ;
+
+    border-radius: 4px;
+
 
     background-color: rgb(255, 255, 255);
 
@@ -74,7 +77,7 @@ div#autocomplete-container, input#main-input {
 
     box-sizing: border-box;
 
-    transition: 0.2s;
+    transition: 0.1s;
     background-color: transparent;
 
 
@@ -89,6 +92,11 @@ div#autocomplete-container, input#main-input {
   }
 
   #found-pokemon-container {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     width: 50vw;
     height: 10vh;
 
@@ -97,4 +105,45 @@ div#autocomplete-container, input#main-input {
     border-radius: 4px;
 
     background-color: rgb(130, 167, 167);
+  }
+
+  #name-container {
+    margin: 1.5rem;
+  }
+
+  #result-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .damage-ratio {
+    text-align: center;
+    margin: 1rem;
+
+    font-size: 1.5rem;
+
+  }
+
+  .damage-ratio-heading {
+    color: bisque;
+  }
+
+  .type-container {
+    font-size: 2rem;
+    text-align: center;
+    margin: 1px;
+    border: solid 1px;
+    height: max-content;
+    padding: 1rem;
+
+    border-radius: 5px;
+
+  }
+
+  .own-type-container {
+    padding: 0.5rem;
+    text-align: center;
+    margin: 1px;
+    border-radius: 5px;
+
   }
