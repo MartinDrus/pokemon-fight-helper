@@ -104,91 +104,80 @@ async function renderCard(id) {
 
     outputContainer.appendChild(image);
 
-    getDamageRelations(pokemonData);
-
-    // let types = await getDamageRelations(pokemonData)
-
-
-    //console.log("renderCard types  ", types);
-
-
-
-    
-
-}
-
-
-async function getDamageRelations(pokemonData) {
-
-    let typeEffectiveness = {
-        normal: 0,
-        fire: 0,
-        water: 0,
-        grass: 0,
-        flying: 0,
-        fighting: 0,
-        poison: 0,
-        electric: 0,
-        ground: 0,
-        rock: 0,
-        psychic: 0,
-        ice: 0,
-        bug: 0,
-        ghost: 0,
-        steel: 0,
-        dragon: 0,
-        dark: 0,
-        fairy: 0
-
+    let types = pokemonData.types;
+    let firstType = types[0].type
+    let secondType = null;
+    if (types.length === 2) {
+        secondType = types[1].type
     }
 
-    let typeArray = await pokemonData.types
 
-    let damageObj = {}
+    let typeEffectiveness = await getDamageRelations(firstType, secondType);
+    let relevantEffectiveness = deleteAveragedEffectiveness(typeEffectiveness);
 
-
-    typeArray.forEach(async entry => {
-        let pokemonType = `type/${entry.type.name}`;
-        let damageStats = await fetchData(pokemonType);
-
-        console.log(damageStats.damage_relations.double_damage_from);
-
-        damageObj.doubleDamage = damageStats.damage_relations.double_damage_from;
-        damageObj.halfDamage = damageStats.damage_relations.half_damage_from;
-        damageObj.noDamage = damageStats.damage_relations.no_damage_from;
+    console.log(relevantEffectiveness);
 
 
-    });
 
-    console.log(damageObj);
+}
 
+function deleteAveragedEffectiveness(input){
+    let typeEffectiveness = input;
+    for (let key in typeEffectiveness) {
+        if (typeEffectiveness[key] === 1) {
+            delete typeEffectiveness[key]
+        }
+    }
+    return typeEffectiveness;
+}
 
-    //calculateDamage(types);
-
+async function getDamageRelations(firstType, secondType) {
+    let typeEffectiveness = {
+        normal: 1,
+        fire: 1,
+        water: 1,
+        grass: 1,
+        flying: 1,
+        fighting: 1,
+        poison: 1,
+        electric: 1,
+        ground: 1,
+        rock: 1,
+        psychic: 1,
+        ice: 1,
+        bug: 1,
+        ghost: 1,
+        steel: 1,
+        dragon: 1,
+        dark: 1,
+        fairy: 1
     
+    }
+    let response = await fetch(firstType.url)
+    let data = await response.json();
+    let relations = data.damage_relations
+    relations.double_damage_from.forEach(elem => {
+        typeEffectiveness[elem.name] *= 2 
+    })
+    relations.half_damage_from.forEach(elem => {
+        typeEffectiveness[elem.name] *= 0.5
+    })
+    relations.no_damage_from.forEach(elem => {
+        typeEffectiveness[elem.name] *= 0 
+    })
+    if (secondType !== null) {
+        let response = await fetch(secondType.url)
+        let data = await response.json();
+        let relations = data.damage_relations
+        relations.double_damage_from.forEach(elem => {
+            typeEffectiveness[elem.name] *= 2 
+        })
+        relations.half_damage_from.forEach(elem => {
+            typeEffectiveness[elem.name] *= 0.5
+        })
+        relations.no_damage_from.forEach(elem => {
+            typeEffectiveness[elem.name] *= 0 
+        })
+    }
+    return typeEffectiveness
 }
-
-
-async function calculateDamage(types) {
-
-
-
-    let test = await types;
-
-
-    console.log(test);
-
-    // (async () => {
-    //     for await (const num of types) {
-    //       console.log(num);
-    //     }
-    // })();
-    // for (let i = 0; i < array.length; i++) {
-    //     const element = array[i];
-        
-    // }
-
-
-
-}
-
