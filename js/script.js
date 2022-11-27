@@ -51,9 +51,9 @@ function onKeyUp(e) {
     if (foundPokemon.id !== undefined) {
         let pokemonId = `${foundPokemon.id}`
 
-        let translatedName = getGermanNameById(foundPokemon.id);
+        // let translatedName = getGermanNameById(foundPokemon.id);
 
-        renderCard(pokemonId, translatedName);
+        renderCard(pokemonId);
     }
 }
 
@@ -83,7 +83,7 @@ function getGermanNameById(id) {
     return translatedName;
 }
 
-async function renderCard(id, translatedName) {
+async function renderCard(id) {
     outputContainer.replaceChildren();
 
     let pokemonData = await fetchData(id);
@@ -95,7 +95,7 @@ async function renderCard(id, translatedName) {
 
     let nameContainer = document.createElement("div");
     nameContainer.id = "name-container"
-    nameContainer.innerText = `${firstCharToUpperCase(pokemonData.name)} \n ${firstCharToUpperCase(translatedName)}`
+    nameContainer.innerText = `${firstCharToUpperCase(pokemonData.name)} \n ${firstCharToUpperCase(getGermanNameById(id))}`
     outputContainer.appendChild(nameContainer)
 
     let typeContainer = document.createElement("div");
@@ -137,7 +137,7 @@ async function renderCard(id, translatedName) {
         presetImageBtnContainer.appendChild(presetImage);
 
         presetImageBtnContainer.addEventListener("click", (evt) => {
-            renderCard(evt.currentTarget.value, "unknown")
+            renderCard(evt.currentTarget.value)
         });
 
         presetContainer.appendChild(presetImageBtnContainer);
@@ -152,6 +152,14 @@ async function renderCard(id, translatedName) {
 
     resultContainer.replaceChildren();
 
+    let effectively = document.createElement("div");
+    effectively.style.backgroundColor = "green";
+    effectively.classList.add("do-dont-do-container");
+    
+    let notEffectively = document.createElement("div");
+    notEffectively.classList.add("do-dont-do-container");
+    notEffectively.style.backgroundColor = "red";
+
     sortedMap.forEach((value, key) => {
 
         let elDamageRatioContainer = document.createElement("div");
@@ -162,6 +170,8 @@ async function renderCard(id, translatedName) {
         heading.textContent = `  ${key} x damage`;
         elDamageRatioContainer.appendChild(heading)
 
+
+
         value.forEach(type => {
             let elTypeContainer = document.createElement("div");
             elTypeContainer.classList.add("type-container");
@@ -170,9 +180,17 @@ async function renderCard(id, translatedName) {
             elTypeContainer.textContent = firstCharToUpperCase(type);
 
             elDamageRatioContainer.appendChild(elTypeContainer)
-        })
+        });
 
-        resultContainer.append(elDamageRatioContainer);
+
+
+        if (key > 1) {
+            effectively.appendChild(elDamageRatioContainer)
+        } else {
+            notEffectively.appendChild(elDamageRatioContainer)
+        }
+        resultContainer.append(effectively);
+        resultContainer.append(notEffectively);
       });
 }
 
@@ -181,7 +199,8 @@ function getTypeColor(type) {
 
     let typeColor = {
         normal: "#A9AA79",
-        fire: "#F0812C",
+        //orginal
+        fire: "#FF9D51",
         water: "#6891F0",
         grass: "#79C94F",
         flying: "#A991F0",

@@ -1,9 +1,14 @@
+@import url('https://fonts.cdnfonts.com/css/andy');
+
 *,
 *::before,
 *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
+    font-family: 'Andy', sans-serif;
+
 }
 
 main {
@@ -12,27 +17,22 @@ main {
     align-items: center;
 
     height: 100vh;
-    background-color: rgb(78, 69, 57);
+    background-color: #EBF3E4;
+
 }
 
 div#autocomplete-container, input#main-input {
-    font: 20px Tahoma, Verdana, Arial, sans-serif;
-    /* font-weight: 600; */
-  }
+    font: 20px 'Andy', sans-serif;
+}
   
-  #autocomplete-container {
+#autocomplete-container {
     position: relative;
     box-sizing: border-box;
     width: 50vw;
     height: 50px;
-
-    margin-top: 3em ;
-
+    margin: 2em 0 1em 0;
     border-radius: 4px;
-
-
     background-color: rgb(255, 255, 255);
-
   }
   
   #autocomplete {
@@ -51,9 +51,6 @@ div#autocomplete-container, input#main-input {
 
     box-sizing: border-box;
     padding: 13px;
-    /* background-color: rgb(27, 66, 66); */
-    /* line-height: 1.5em; */
-
 
     cursor: text;
   }
@@ -66,23 +63,18 @@ div#autocomplete-container, input#main-input {
     top: 0;
     left: 0;
 
-
-
     border: 1px solid #aaa;
     border-radius: 4px;
     outline: none;
     padding: 13px;
 
-    /* line-height: 1.5em; */
 
     box-sizing: border-box;
 
     transition: 0.1s;
     background-color: transparent;
 
-
     cursor: text;
-
 
   }
   
@@ -91,63 +83,91 @@ div#autocomplete-container, input#main-input {
     box-shadow: 0 0 8px 0 dodgerBlue;
   }
 
+  /* ------------------------ */
+
   #found-pokemon-container {
 
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 
     width: 50vw;
     height: 10vh;
 
-    margin: 2em;
-
+    margin-bottom: 0.5em;
+    padding: 0 4em;
     border-radius: 4px;
+    background-color: #208496;
 
-    background-color: rgb(130, 167, 167);
+    font-size: 18pt;
   }
 
   #name-container {
-    margin: 1.5rem;
+    line-height: 2rem;  
   }
 
-  #result-container {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .damage-ratio {
-    text-align: center;
-    margin: 1rem;
-
-    font-size: 1.5rem;
-
-  }
-
-  .damage-ratio-heading {
-    color: bisque;
-  }
-
-  .type-container {
-    font-size: 2rem;
-    text-align: center;
-    margin: 1px;
-    border: solid 1px;
-    height: max-content;
-    padding: 1rem;
-
-    border-radius: 5px;
-
-  }
 
   #preset-container {
     display: flex;
+
+    margin-bottom: 0.5em;
   }
 
   .preset-image-btn {
     border-radius: 5px;
     margin: 1px;
+
+    background-color: #208496;
+
   }
+
+  #result-container {
+    display: flex;
+    /* flex-direction: row; */
+
+  }
+
+  .damage-ratio {
+
+    height: min-content;
+
+    text-align: center;
+    background-color: #FFFFFF;
+    
+    margin: 0.5rem;
+    padding: 0.2rem;
+
+    font-size: 1.5rem;
+
+    border: solid 1px;
+    border-radius: 5px;
+
+  }
+
+  .damage-ratio-heading {
+    color: #43696C;
+  }
+
+  .type-container {
+    
+    font-size: 2rem;
+    text-align: center;
+    margin: 1px;
+    height: max-content;
+    padding: 1rem;
+
+    border: solid 1px;
+    border-radius: 5px;
+
+  }
+
+  .do-dont-do-container {
+    display: flex;
+    border-radius: 5px;
+    margin: 5px;
+  }
+
+
 
   .own-type-container {
     padding: 0.5rem;
@@ -158,9 +178,14 @@ div#autocomplete-container, input#main-input {
 
   #add-preset-btn {
     font-size: 2rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    margin: 1rem;
+    width: 100px;
+    height: 40px;
+    border-radius: 50px;
+    /* margin-right: 5rem; */
 
+    background: rgb(162,217,151);
+    background: -moz-linear-gradient(90deg, rgba(162,217,151,1) 0%, rgba(116,214,157,1) 50%, rgba(43,200,171,1) 100%);
+    background: -webkit-linear-gradient(90deg, rgba(162,217,151,1) 0%, rgba(116,214,157,1) 50%, rgba(43,200,171,1) 100%);
+    background: linear-gradient(90deg, rgba(162,217,151,1) 0%, rgba(116,214,157,1) 50%, rgba(43,200,171,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#a2d997",endColorstr="#2bc8ab",GradientType=1);
   }
