@@ -140,6 +140,15 @@ div#autocomplete-container, input#main-input {
 
   }
 
+  #preset-container {
+    display: flex;
+  }
+
+  .preset-image-btn {
+    border-radius: 5px;
+    margin: 1px;
+  }
+
   .own-type-container {
     padding: 0.5rem;
     text-align: center;

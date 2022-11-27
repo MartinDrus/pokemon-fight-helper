@@ -8,13 +8,12 @@ let outputContainer = document.querySelector("#found-pokemon-container");
 let presetContainer = document.querySelector("#preset-container");
 let resultContainer = document.querySelector("#result-container");
 
+
 function getNames(language_id) {
     return names.filter(pokemon => (pokemon.local_language_id == language_id || pokemon.local_language_id == 9))
 }
 
 let getGermanNames = getNames(6)
-
-let presetArray = [];
 
 function findPokemon(query){
     let foundObj = {};
@@ -50,9 +49,11 @@ function onKeyUp(e) {
     }
 
     if (foundPokemon.id !== undefined) {
-        let pokemonId = `pokemon/${foundPokemon.id}`
+        let pokemonId = `${foundPokemon.id}`
 
-        renderCard(pokemonId, foundPokemon.name);
+        let translatedName = getGermanNameById(foundPokemon.id);
+
+        renderCard(pokemonId, translatedName);
     }
 }
 
@@ -67,9 +68,19 @@ function keyChecker(e, key) {
 }
 
 const fetchData = async (inquiry) => {
-    let response = await fetch(`https://pokeapi.co/api/v2/${inquiry}`)
+    let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${inquiry}`)
     let data = await response.json();
     return data;
+}
+
+function getGermanNameById(id) {
+    let translatedName = "";
+    getGermanNames.forEach(elem => {
+        if (elem.pokemon_species_id === id && elem.local_language_id == 6) {
+            translatedName = elem.name;
+        }
+    });
+    return translatedName;
 }
 
 async function renderCard(id, translatedName) {
@@ -116,13 +127,21 @@ async function renderCard(id, translatedName) {
 
     elAddPresetBtn.addEventListener("click", e => {
 
-        let presetObj = {};
-        presetObj.id = id;
-        presetObj.translatedName = translatedName;
+        let presetImageBtnContainer = document.createElement("button");
+        presetImageBtnContainer.classList.add("preset-image-btn");
+        presetImageBtnContainer.value = id;
 
-        presetContainer.appendChild(image)
+        let presetImage = document.createElement("img");
+        presetImage.src = pokemonData.sprites.front_default;
+        
+        presetImageBtnContainer.appendChild(presetImage);
 
-        presetArray.push(presetObj);
+        presetImageBtnContainer.addEventListener("click", (evt) => {
+            renderCard(evt.currentTarget.value, "unknown")
+        });
+
+        presetContainer.appendChild(presetImageBtnContainer);
+
 
     });
 
@@ -157,11 +176,6 @@ async function renderCard(id, translatedName) {
       });
 }
 
-// document.querySelector("#add-preset-btn").addEventListener("click", () => {
-//     console.log("vewv");
-//     let currentImage = document.querySelector("current-picture");
-//     presetContainer.appendChild(currentImage)
-// })
 
 function getTypeColor(type) {
 
