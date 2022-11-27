@@ -5,34 +5,31 @@ const autocomplete = container.querySelector('#autocomplete');
 const mainInput = container.querySelector('#main-input');
 
 let outputContainer = document.querySelector("#found-pokemon-container");
+let presetContainer = document.querySelector("#preset-container");
 let resultContainer = document.querySelector("#result-container");
 
 function getNames(language_id) {
     return names.filter(pokemon => (pokemon.local_language_id == language_id || pokemon.local_language_id == 9))
 }
 
-
-
 let getGermanNames = getNames(6)
+
+let presetArray = [];
 
 function findPokemon(query){
     let foundObj = {};
-
     let result = getGermanNames.filter(pokemon => {
         return pokemon.name.toLowerCase().startsWith(query.toLowerCase())
     });
-
     if (result[0] !== undefined && query.at(0) !== undefined) {
                 foundObj.name = query+result[0].name.toLowerCase().substring(query.length);
                 foundObj.id = result[0].pokemon_species_id;
             return foundObj
-
     } else {
         foundObj.name = "";
         foundObj.id = undefined
         return foundObj;
     }
-
 }
 
 mainInput.addEventListener('keyup', onKeyUp);
@@ -81,6 +78,7 @@ async function renderCard(id, translatedName) {
     let pokemonData = await fetchData(id);
 
     let image = document.createElement("img");
+    image.id = "current-picture"
     image.src = pokemonData.sprites.front_default;
     outputContainer.appendChild(image);
 
@@ -111,6 +109,23 @@ async function renderCard(id, translatedName) {
 
     outputContainer.appendChild(typeContainer);
 
+    let elAddPresetBtn = document.createElement("button");
+    elAddPresetBtn.id = "add-preset-btn";
+    elAddPresetBtn.textContent = "+";
+    outputContainer.appendChild(elAddPresetBtn);
+
+    elAddPresetBtn.addEventListener("click", e => {
+
+        let presetObj = {};
+        presetObj.id = id;
+        presetObj.translatedName = translatedName;
+
+        presetContainer.appendChild(image)
+
+        presetArray.push(presetObj);
+
+    });
+
     let typeEffectiveness = await getDamageRelations(firstType, secondType);
     let relevantEffectiveness = deleteAveragedEffectiveness(typeEffectiveness);
     let myMap = separateRelevantEffectiveness(relevantEffectiveness)
@@ -125,7 +140,7 @@ async function renderCard(id, translatedName) {
 
         let heading = document.createElement("h4");
         heading.classList.add("damage-ratio-heading")
-        heading.textContent = `  ${key} damage`;
+        heading.textContent = `  ${key} x damage`;
         elDamageRatioContainer.appendChild(heading)
 
         value.forEach(type => {
@@ -141,6 +156,12 @@ async function renderCard(id, translatedName) {
         resultContainer.append(elDamageRatioContainer);
       });
 }
+
+// document.querySelector("#add-preset-btn").addEventListener("click", () => {
+//     console.log("vewv");
+//     let currentImage = document.querySelector("current-picture");
+//     presetContainer.appendChild(currentImage)
+// })
 
 function getTypeColor(type) {
 

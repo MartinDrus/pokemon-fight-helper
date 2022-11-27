@@ -26,7 +26,7 @@ div#autocomplete-container, input#main-input {
     width: 50vw;
     height: 50px;
 
-    margin-top: 5em ;
+    margin-top: 3em ;
 
     border-radius: 4px;
 
@@ -145,5 +145,13 @@ div#autocomplete-container, input#main-input {
     text-align: center;
     margin: 1px;
     border-radius: 5px;
+  }
+
+  #add-preset-btn {
+    font-size: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    margin: 1rem;
 
   }
