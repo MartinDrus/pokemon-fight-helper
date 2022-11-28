@@ -14,7 +14,7 @@ function getNames(language_id) {
 }
 let getGermanNames = getNames(6)
 
-//
+// Suche Pokemon
 function findPokemon(query){
     let foundObj = {};
     let result = getGermanNames.filter(pokemon => {
@@ -52,9 +52,10 @@ function onKeyUp(e) {
     if (foundPokemon.id !== undefined) {
         let pokemonId = `${foundPokemon.id}`
 
-        // let translatedName = getGermanNameById(foundPokemon.id);
+        setTimeout(() => {
+            renderCard(pokemonId);
+        }, "600")
 
-        renderCard(pokemonId);
     }
 }
 
@@ -278,7 +279,15 @@ async function getDamageRelations(firstType, secondType) {
         dark: 1,
         fairy: 1
     }
-    let response = await fetch(firstType.url)
+
+    if (secondType !== null) {
+        const [firstTypeRelations, secondTypeRelations] = await Promise.all([
+            fetch(firstType.url).then(relations => relations.json()), fetch(secondType.url).then(relations => relations.json())
+        ])
+        console.log(firstTypeRelations, secondTypeRelations);
+    }
+
+    let response = await fetch(firstType.url);
     let data = await response.json();
     let relations = data.damage_relations
     relations.double_damage_from.forEach(elem => {
@@ -291,7 +300,7 @@ async function getDamageRelations(firstType, secondType) {
         typeEffectiveness[elem.name] *= 0 
     })
     if (secondType !== null) {
-        let response = await fetch(secondType.url)
+        let response = await fetch(secondType.url);
         let data = await response.json();
         let relations = data.damage_relations
         relations.double_damage_from.forEach(elem => {
