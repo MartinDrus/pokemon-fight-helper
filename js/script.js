@@ -8,13 +8,13 @@ let outputContainer = document.querySelector("#found-pokemon-container");
 let presetContainer = document.querySelector("#preset-container");
 let resultContainer = document.querySelector("#result-container");
 
-
+//Filter für deutscheSprachauswahl
 function getNames(language_id) {
     return names.filter(pokemon => (pokemon.local_language_id == language_id || pokemon.local_language_id == 9))
 }
-
 let getGermanNames = getNames(6)
 
+//
 function findPokemon(query){
     let foundObj = {};
     let result = getGermanNames.filter(pokemon => {
@@ -31,6 +31,7 @@ function findPokemon(query){
     }
 }
 
+//EventListener für das Suchfeld, das soweit einzige Input
 mainInput.addEventListener('keyup', onKeyUp);
 
 function onKeyUp(e) {
@@ -86,18 +87,22 @@ function getGermanNameById(id) {
 async function renderCard(id) {
     outputContainer.replaceChildren();
 
+    //Alle Daten des Pokemon aus der API 
     let pokemonData = await fetchData(id);
-
+//! --------found-pokemon-container---------
+    //Foto-Element
     let image = document.createElement("img");
     image.id = "current-picture"
     image.src = pokemonData.sprites.front_default;
     outputContainer.appendChild(image);
 
+    //Feld für Namens-Ausgabe
     let nameContainer = document.createElement("div");
     nameContainer.id = "name-container"
     nameContainer.innerText = `${firstCharToUpperCase(pokemonData.name)} \n ${firstCharToUpperCase(getGermanNameById(id))}`
     outputContainer.appendChild(nameContainer)
 
+    // Der Typ oder die Typen des Pokemons
     let typeContainer = document.createElement("div");
     let types = pokemonData.types;
 
@@ -108,6 +113,7 @@ async function renderCard(id) {
     firstTypeContainer.textContent = firstType.name;
     typeContainer.appendChild(firstTypeContainer);
 
+    //Prüfung ob Pokemon zweiten Typen besitzt
     let secondType = null;
     if (types.length === 2) {
         secondType = types[1].type
@@ -117,41 +123,45 @@ async function renderCard(id) {
         secondTypeContainer.textContent = secondType.name;
         typeContainer.appendChild(secondTypeContainer);
     }
-
     outputContainer.appendChild(typeContainer);
 
+    //Preset-BTN - Zwischenspeicher der ID als Value
     let elAddPresetBtn = document.createElement("button");
     elAddPresetBtn.id = "add-preset-btn";
     elAddPresetBtn.textContent = "+";
     outputContainer.appendChild(elAddPresetBtn);
 
-    elAddPresetBtn.addEventListener("click", e => {
-
+    elAddPresetBtn.addEventListener("click", () => {
+        //!----------preset-container----------------
+        //Preset - Button mit Foto als Inhalt und ID als Value  
         let presetImageBtnContainer = document.createElement("button");
         presetImageBtnContainer.classList.add("preset-image-btn");
         presetImageBtnContainer.value = id;
 
         let presetImage = document.createElement("img");
         presetImage.src = pokemonData.sprites.front_default;
-        
         presetImageBtnContainer.appendChild(presetImage);
 
+        //Bei Click auf Preset - Button wird neu gerendert
         presetImageBtnContainer.addEventListener("click", (evt) => {
             renderCard(evt.currentTarget.value)
         });
-
         presetContainer.appendChild(presetImageBtnContainer);
-
-
     });
 
+    //!----------------result-container---------------------------
+    // Objekt aller Typen als String(Key) und deren Schadensrate(Value)
     let typeEffectiveness = await getDamageRelations(firstType, secondType);
+    // Entferne Typen mit Standard-Effektivität von 1 
     let relevantEffectiveness = deleteAveragedEffectiveness(typeEffectiveness);
-    let myMap = separateRelevantEffectiveness(relevantEffectiveness)
+    // Fasse Typen mit gleichen Schadenswerten in einer Map zusammen
+    let myMap = separateRelevantEffectiveness(relevantEffectiveness);
+    // Sortiere Map nach Höchster Effektivität absteigend
     let sortedMap = new Map([...myMap.entries()].sort().reverse());
 
     resultContainer.replaceChildren();
 
+    //Teile auf in: Fügt erhöhten und verringerten Schaden hinzu
     let effectively = document.createElement("div");
     effectively.style.backgroundColor = "green";
     effectively.classList.add("do-dont-do-container");
@@ -170,20 +180,14 @@ async function renderCard(id) {
         heading.textContent = `  ${key} x damage`;
         elDamageRatioContainer.appendChild(heading)
 
-
-
         value.forEach(type => {
             let elTypeContainer = document.createElement("div");
             elTypeContainer.classList.add("type-container");
             elTypeContainer.style.backgroundColor = getTypeColor(type);
-            //todo german trans
             elTypeContainer.textContent = firstCharToUpperCase(type);
 
             elDamageRatioContainer.appendChild(elTypeContainer)
         });
-
-
-
         if (key > 1) {
             effectively.appendChild(elDamageRatioContainer)
         } else {
@@ -194,9 +198,8 @@ async function renderCard(id) {
       });
 }
 
-
+// Kampf-Typ(Key) - dazugehörige Farbe (Value) 
 function getTypeColor(type) {
-
     let typeColor = {
         normal: "#A9AA79",
         //orginal
@@ -218,11 +221,10 @@ function getTypeColor(type) {
         dark: "#715746",
         fairy: "#FA00C0"
     }
-
-    return typeColor[type]
-    
+    return typeColor[type];
 }
 
+// Fasse Typen mit gleichen Schadenswerten in einer Map zusammen
 function separateRelevantEffectiveness(input) {
     let relevantEffectiveness = input;
     let myMap = new Map();
@@ -238,6 +240,7 @@ function separateRelevantEffectiveness(input) {
       return myMap
 }
 
+// Entferne Typen mit Standard-Effektivität von 1 
 function deleteAveragedEffectiveness(input){
     let typeEffectiveness = input;
     for (let value in typeEffectiveness) {
@@ -248,10 +251,12 @@ function deleteAveragedEffectiveness(input){
     return typeEffectiveness;
 }
 
+// Erster Buchstabe des Wortes wird groß
 function firstCharToUpperCase(word) {
-    return word.at(0).toUpperCase()+word.substring(1);
+    return word.at(0).toUpperCase()+word.substring(1).toLowerCase();
 }
 
+// Objekt aller Typen als String(Key) und deren Schadensrate(Value)
 async function getDamageRelations(firstType, secondType) {
     let typeEffectiveness = {
         normal: 1,
